@@ -96,17 +96,61 @@ ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 ## Development
 
+### With Docker (recommended)
+
 ```bash
-# Install dependencies
-pip install -e ".[dev]"
+# Start all services
+docker-compose up -d
 
 # Run migrations
+docker-compose exec api alembic upgrade head
+
+# View logs
+docker-compose logs -f api
+```
+
+### Local Development
+
+#### Using uv (fast, recommended)
+
+```bash
+# Install uv if you haven't
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Create venv and install dependencies
+uv venv
+source .venv/bin/activate  # or `.venv\Scripts\activate` on Windows
+uv pip install -e ".[dev]"
+
+# Run migrations (requires running PostgreSQL)
 alembic upgrade head
 
 # Run dev server
 uvicorn app.main:app --reload
+```
 
-# Run tests
+#### Using pip
+
+```bash
+# Create venv and install dependencies
+python3 -m venv .venv
+source .venv/bin/activate  # or `.venv\Scripts\activate` on Windows
+pip install -e ".[dev]"
+
+# Run migrations (requires running PostgreSQL)
+alembic upgrade head
+
+# Run dev server
+uvicorn app.main:app --reload
+```
+
+### Running Tests
+
+```bash
+# With uv
+uv run pytest
+
+# With pip
 pytest
 ```
 
