@@ -26,7 +26,8 @@ BOLD='\033[1m'
 NC='\033[0m' # No Color
 
 API_URL="${API_URL:-http://localhost:8000}"
-DEMO_EMAIL="demo-$(date +%s)@robofleet.io"
+DEMO_TS=$(date +%s)
+DEMO_EMAIL="demo-${DEMO_TS}@robofleet.io"
 DEMO_PASSWORD="demopass123"
 
 # Helper functions
@@ -142,12 +143,12 @@ print_step "Creating Robot 1: Scout Drone"
 ROBOT1_RESPONSE=$(curl -s -X POST "${API_URL}/api/v1/robots" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
-    -d '{
-        "name": "Scout-01",
-        "serial_number": "DRN-2024-001",
-        "robot_type": "drone",
-        "status": "idle"
-    }')
+    -d "{
+        \"name\": \"Scout-01\",
+        \"serial_number\": \"DRN-${DEMO_TS}-001\",
+        \"robot_type\": \"drone\",
+        \"status\": \"idle\"
+    }")
 print_json "$ROBOT1_RESPONSE"
 ROBOT1_ID=$(echo "$ROBOT1_RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['id'])")
 print_success "Created robot: $ROBOT1_ID"
@@ -156,12 +157,12 @@ print_step "Creating Robot 2: Delivery Bot"
 ROBOT2_RESPONSE=$(curl -s -X POST "${API_URL}/api/v1/robots" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
-    -d '{
-        "name": "Carrier-07",
-        "serial_number": "AGV-2024-007",
-        "robot_type": "agv",
-        "status": "charging"
-    }')
+    -d "{
+        \"name\": \"Carrier-07\",
+        \"serial_number\": \"AGV-${DEMO_TS}-007\",
+        \"robot_type\": \"agv\",
+        \"status\": \"charging\"
+    }")
 print_json "$ROBOT2_RESPONSE"
 ROBOT2_ID=$(echo "$ROBOT2_RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['id'])")
 print_success "Created robot: $ROBOT2_ID"
@@ -170,12 +171,12 @@ print_step "Creating Robot 3: Inspection Arm"
 ROBOT3_RESPONSE=$(curl -s -X POST "${API_URL}/api/v1/robots" \
     -H "Authorization: Bearer ${TOKEN}" \
     -H "Content-Type: application/json" \
-    -d '{
-        "name": "Inspector-03",
-        "serial_number": "ARM-2024-003",
-        "robot_type": "arm",
-        "status": "idle"
-    }')
+    -d "{
+        \"name\": \"Inspector-03\",
+        \"serial_number\": \"ARM-${DEMO_TS}-003\",
+        \"robot_type\": \"arm\",
+        \"status\": \"idle\"
+    }")
 print_json "$ROBOT3_RESPONSE"
 ROBOT3_ID=$(echo "$ROBOT3_RESPONSE" | python3 -c "import sys, json; print(json.load(sys.stdin)['id'])")
 print_success "Created robot: $ROBOT3_ID"
