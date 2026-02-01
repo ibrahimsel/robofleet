@@ -1,4 +1,4 @@
-# 🤖 RoboFleet
+# 🤖 OpenMotiv
 
 A production-ready fleet management API for autonomous robots. Built with FastAPI, PostgreSQL, Redis, Celery, and WebSockets.
 
@@ -32,8 +32,8 @@ Run the interactive demo to see all features in action:
 
 ```bash
 # Start services first
-docker-compose up -d
-docker-compose exec api alembic upgrade head
+docker compose up -d
+docker compose exec api alembic upgrade head
 
 # Run the demo
 ./scripts/run-demo.sh
@@ -47,8 +47,8 @@ The demo walks through: authentication → robot management → mission lifecycl
 
 ```bash
 # Clone the repo
-git clone https://github.com/ibrahimsel/robofleet.git
-cd robofleet
+git clone https://github.com/ibrahimsel/openmotiv.git
+cd openmotiv
 
 # Copy environment file
 cp .env.example .env
@@ -116,12 +116,12 @@ uvicorn app.main:app --reload
 # Register a new user
 curl -X POST http://localhost:8000/api/v1/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"email": "pilot@robofleet.io", "password": "securepass123"}'
+  -d '{"email": "pilot@openmotiv.io", "password": "securepass123"}'
 
 # Login and get JWT token
 curl -X POST http://localhost:8000/api/v1/auth/login \
   -H "Content-Type: application/x-www-form-urlencoded" \
-  -d "username=pilot@robofleet.io&password=securepass123"
+  -d "username=pilot@openmotiv.io&password=securepass123"
 
 # Response: {"access_token": "eyJ...", "token_type": "bearer"}
 
@@ -241,7 +241,7 @@ asyncio.run(listen())
 
 ## ⏰ Background Tasks
 
-RoboFleet uses Celery for background processing:
+OpenMotiv uses Celery for background processing:
 
 ### Async Tasks
 
@@ -279,7 +279,7 @@ New users are assigned `viewer` role by default.
 ## 📁 Project Structure
 
 ```
-robofleet/
+openmotiv/
 ├── app/
 │   ├── api/
 │   │   ├── v1/
@@ -373,4 +373,4 @@ MIT
 
 ---
 
-Built by [Ibrahim Sel](https://github.com/ibrahimsel) • [View on GitHub](https://github.com/ibrahimsel/robofleet)
+Built by [Ibrahim Sel](https://github.com/ibrahimsel) • [View on GitHub](https://github.com/ibrahimsel/openmotiv)

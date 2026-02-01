@@ -1,5 +1,5 @@
 [project]
-name = "robofleet"
+name = "openmotiv"
 version = "0.1.0"
 description = "Fleet management API for autonomous robots"
 readme = "README.md"

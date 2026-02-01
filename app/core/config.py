@@ -12,11 +12,11 @@ class Settings(BaseSettings):
     )
 
     # App
-    app_name: str = "RoboFleet"
+    app_name: str = "OpenMotiv"
     debug: bool = False
 
     # Database
-    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/robofleet"
+    database_url: str = "postgresql+asyncpg://postgres:postgres@localhost:5432/openmotiv"
 
     # Redis
     redis_url: str = "redis://localhost:6379"

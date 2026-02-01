@@ -18,7 +18,7 @@ from app.models.robot import Robot, RobotStatus, RobotType
 from app.models.user import User, UserRole
 
 # Use test database
-TEST_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@db:5432/robofleet_test"
+TEST_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@db:5432/openmotiv_test"
 
 
 @pytest.fixture(scope="session")

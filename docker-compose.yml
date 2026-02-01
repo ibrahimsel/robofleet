@@ -4,7 +4,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/robofleet
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/openmotiv
       - REDIS_URL=redis://redis:6379
       - DEBUG=true
     depends_on:
@@ -19,7 +19,7 @@ services:
   celery-worker:
     build: .
     environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/robofleet
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/openmotiv
       - REDIS_URL=redis://redis:6379
     depends_on:
       db:
@@ -33,7 +33,7 @@ services:
   celery-beat:
     build: .
     environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/robofleet
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/openmotiv
       - REDIS_URL=redis://redis:6379
     depends_on:
       - celery-worker
@@ -46,7 +46,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=robofleet
+      - POSTGRES_DB=openmotiv
     ports:
       - "5432:5432"
     volumes:

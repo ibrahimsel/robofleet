@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# RoboFleet Demo Script
+# OpenMotiv Demo Script
 # Demonstrates all major features of the API
 #
 # Usage: ./scripts/run-demo.sh
@@ -12,7 +12,7 @@ set -e
 # Ensure we're in the project root
 if [ ! -f "docker-compose.yml" ]; then
     echo "Error: Run this script from the project root directory"
-    echo "  cd /path/to/robofleet && ./scripts/run-demo.sh"
+    echo "  cd /path/to/openmotiv && ./scripts/run-demo.sh"
     exit 1
 fi
 
@@ -27,7 +27,7 @@ NC='\033[0m' # No Color
 
 API_URL="${API_URL:-http://localhost:8000}"
 DEMO_TS=$(date +%s)
-DEMO_EMAIL="demo-${DEMO_TS}@robofleet.io"
+DEMO_EMAIL="demo-${DEMO_TS}@openmotiv.io"
 DEMO_PASSWORD="demopass123"
 
 # Helper functions
@@ -83,11 +83,12 @@ check_api() {
 
 clear
 echo -e "${BOLD}"
-echo "    ____        __          ________         __  "
-echo "   / __ \____  / /_  ____  / ____/ /__  ___  / /_ "
-echo "  / /_/ / __ \/ __ \/ __ \/ /_  / / _ \/ _ \/ __/ "
-echo " / _, _/ /_/ / /_/ / /_/ / __/ / /  __/  __/ /_   "
-echo "/_/ |_|\____/_.___/\____/_/   /_/\___/\___/\__/   "
+echo "  ___                   __  __       _   _       "
+echo " / _ \ _ __   ___ _ __ |  \/  | ___ | |_(_)_   __"
+echo "| | | | '_ \ / _ \ '_ \| |\/| |/ _ \| __| \ \ / /"
+echo "| |_| | |_) |  __/ | | | |  | | (_) | |_| |\ V / "
+echo " \___/| .__/ \___|_| |_|_|  |_|\___/ \__|_| \_/  "
+echo "      |_|                                        "
 echo ""
 echo -e "${NC}"
 echo -e "${CYAN}Fleet Management API Demo${NC}"
@@ -112,15 +113,15 @@ USER_ID=$(echo "$REGISTER_RESPONSE" | python3 -c "import sys, json; print(json.l
 print_success "User registered!"
 
 print_step "Promoting user to operator role..."
-if docker compose exec -T db psql -U postgres -d robofleet -c \
+if docker compose exec -T db psql -U postgres -d openmotiv -c \
     "UPDATE users SET role = 'OPERATOR' WHERE id = '${USER_ID}';" > /dev/null 2>&1; then
     print_success "User promoted to operator!"
-elif psql "${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/robofleet}" -c \
+elif psql "${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/openmotiv}" -c \
     "UPDATE users SET role = 'OPERATOR' WHERE id = '${USER_ID}';" > /dev/null 2>&1; then
     print_success "User promoted to operator!"
 else
     echo -e "${RED}Warning: Could not promote user. Robot creation may fail.${NC}"
-    echo -e "${YELLOW}Try running: docker compose exec db psql -U postgres -d robofleet${NC}"
+    echo -e "${YELLOW}Try running: docker compose exec db psql -U postgres -d openmotiv${NC}"
 fi
 
 print_step "Logging in and obtaining JWT token..."

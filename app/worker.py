@@ -6,7 +6,7 @@ from app.core.config import settings
 
 # Create Celery app
 celery_app = Celery(
-    "robofleet",
+    "openmotiv",
     broker=settings.redis_url,
     backend=settings.redis_url,
     include=["app.tasks.missions", "app.tasks.robots"],
