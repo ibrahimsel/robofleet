@@ -4,13 +4,13 @@
 # Demonstrates all major features of the API
 #
 # Usage: ./scripts/run-demo.sh
-# Run from project root (where docker compose.yml is located)
+# Run from project root (where docker-compose.yml is located)
 #
 
 set -e
 
 # Ensure we're in the project root
-if [ ! -f "docker compose.yml" ]; then
+if [ ! -f "docker-compose.yml" ]; then
     echo "Error: Run this script from the project root directory"
     echo "  cd /path/to/robofleet && ./scripts/run-demo.sh"
     exit 1
