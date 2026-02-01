@@ -111,15 +111,15 @@ USER_ID=$(echo "$REGISTER_RESPONSE" | python3 -c "import sys, json; print(json.l
 print_success "User registered!"
 
 print_step "Promoting user to operator role..."
-if docker compose exec -T db psql -U robofleet -d robofleet -c \
+if docker compose exec -T db psql -U postgres -d robofleet -c \
     "UPDATE users SET role = 'operator' WHERE id = '${USER_ID}';" > /dev/null 2>&1; then
     print_success "User promoted to operator!"
-elif psql "${DATABASE_URL:-postgresql://robofleet:robofleet@localhost:5432/robofleet}" -c \
+elif psql "${DATABASE_URL:-postgresql://postgres:postgres@localhost:5432/robofleet}" -c \
     "UPDATE users SET role = 'operator' WHERE id = '${USER_ID}';" > /dev/null 2>&1; then
     print_success "User promoted to operator!"
 else
     echo -e "${RED}Warning: Could not promote user. Robot creation may fail.${NC}"
-    echo -e "${YELLOW}Try running: docker compose exec db psql -U robofleet -d robofleet${NC}"
+    echo -e "${YELLOW}Try running: docker compose exec db psql -U postgres -d robofleet${NC}"
 fi
 
 print_step "Logging in and obtaining JWT token..."
