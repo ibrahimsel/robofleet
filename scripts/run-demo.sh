@@ -4,13 +4,13 @@
 # Demonstrates all major features of the API
 #
 # Usage: ./scripts/run-demo.sh
-# Run from project root (where docker-compose.yml is located)
+# Run from project root (where docker compose.yml is located)
 #
 
 set -e
 
 # Ensure we're in the project root
-if [ ! -f "docker-compose.yml" ]; then
+if [ ! -f "docker compose.yml" ]; then
     echo "Error: Run this script from the project root directory"
     echo "  cd /path/to/robofleet && ./scripts/run-demo.sh"
     exit 1
@@ -70,8 +70,8 @@ check_api() {
         echo -e "${RED}✗ API is not running at ${API_URL}${NC}"
         echo ""
         echo "Start the API with:"
-        echo "  docker-compose up -d"
-        echo "  docker-compose exec api alembic upgrade head"
+        echo "  docker compose up -d"
+        echo "  docker compose exec api alembic upgrade head"
         exit 1
     fi
 }
@@ -111,11 +111,16 @@ USER_ID=$(echo "$REGISTER_RESPONSE" | python3 -c "import sys, json; print(json.l
 print_success "User registered!"
 
 print_step "Promoting user to operator role..."
-docker-compose exec -T db psql -U robofleet -d robofleet -c \
-    "UPDATE users SET role = 'operator' WHERE id = '${USER_ID}';" > /dev/null 2>&1 \
-    || psql "${DATABASE_URL:-postgresql://robofleet:robofleet@localhost:5432/robofleet}" -c \
-    "UPDATE users SET role = 'operator' WHERE id = '${USER_ID}';" > /dev/null 2>&1
-print_success "User promoted to operator!"
+if docker compose exec -T db psql -U robofleet -d robofleet -c \
+    "UPDATE users SET role = 'operator' WHERE id = '${USER_ID}';" > /dev/null 2>&1; then
+    print_success "User promoted to operator!"
+elif psql "${DATABASE_URL:-postgresql://robofleet:robofleet@localhost:5432/robofleet}" -c \
+    "UPDATE users SET role = 'operator' WHERE id = '${USER_ID}';" > /dev/null 2>&1; then
+    print_success "User promoted to operator!"
+else
+    echo -e "${RED}Warning: Could not promote user. Robot creation may fail.${NC}"
+    echo -e "${YELLOW}Try running: docker compose exec db psql -U robofleet -d robofleet${NC}"
+fi
 
 print_step "Logging in and obtaining JWT token..."
 LOGIN_RESPONSE=$(curl -s -X POST "${API_URL}/api/v1/auth/login" \
