@@ -24,7 +24,22 @@ A production-ready fleet management API for autonomous robots. Built with FastAP
 | Task Queue | Celery + Celery Beat |
 | Validation | Pydantic v2 |
 | Auth | JWT (python-jose) + bcrypt |
-| Containers | Docker + docker-compose |
+| Containers | Docker + docker compose |
+
+## 🎬 Live Demo
+
+Run the interactive demo to see all features in action:
+
+```bash
+# Start services first
+docker-compose up -d
+docker-compose exec api alembic upgrade head
+
+# Run the demo
+./scripts/run-demo.sh
+```
+
+The demo walks through: authentication → robot management → mission lifecycle → background tasks → WebSocket info.
 
 ## 🚀 Quick Start
 
@@ -39,10 +54,10 @@ cd robofleet
 cp .env.example .env
 
 # Start all services (api, db, redis, celery-worker, celery-beat)
-docker-compose up -d
+docker compose up -d
 
 # Run database migrations
-docker-compose exec api alembic upgrade head
+docker compose exec api alembic upgrade head
 
 # API is now live!
 # 📖 Docs: http://localhost:8000/docs
@@ -64,7 +79,7 @@ source .venv/bin/activate
 uv pip install -e ".[dev]"
 
 # Start PostgreSQL and Redis (or use Docker for just those)
-docker-compose up -d db redis
+docker compose up -d db redis
 
 # Run migrations
 alembic upgrade head
@@ -83,7 +98,7 @@ source .venv/bin/activate
 pip install -e ".[dev]"
 
 # Start PostgreSQL and Redis
-docker-compose up -d db redis
+docker compose up -d db redis
 
 # Run migrations
 alembic upgrade head
@@ -297,7 +312,7 @@ robofleet/
 
 ```bash
 # With Docker
-docker-compose exec api pytest
+docker compose exec api pytest
 
 # Local (with uv)
 uv run pytest -v
@@ -321,16 +336,16 @@ pytest --cov=app --cov-report=term-missing
 
 ```bash
 # View logs
-docker-compose logs -f api celery-worker
+docker compose logs -f api celery-worker
 
 # Restart a service
-docker-compose restart api
+docker compose restart api
 
 # Stop everything
-docker-compose down
+docker compose down
 
 # Stop and remove volumes (fresh start)
-docker-compose down -v
+docker compose down -v
 ```
 
 ## 📝 Environment Variables
