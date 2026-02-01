@@ -4,7 +4,7 @@ from collections.abc import AsyncIterator
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.v1 import auth, missions, robots
+from app.api.v1 import auth, missions, robots, websocket
 from app.core.config import settings
 
 
@@ -40,6 +40,7 @@ app.add_middleware(
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(robots.router, prefix="/api/v1")
 app.include_router(missions.router, prefix="/api/v1")
+app.include_router(websocket.router)
 
 
 @app.get("/health")

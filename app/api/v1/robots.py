@@ -1,9 +1,10 @@
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException, status
 from sqlalchemy import select
 
 from app.api.deps import CurrentUser, DBSession, OperatorUser
+from app.core.websocket import manager
 from app.models.robot import Robot
 from app.schemas.robot import RobotCreate, RobotRead, RobotStatusUpdate, RobotUpdate
 
@@ -94,6 +95,7 @@ async def update_robot_status(
     status_in: RobotStatusUpdate,
     session: DBSession,
     current_user: OperatorUser,
+    background_tasks: BackgroundTasks,
 ) -> Robot:
     """Update robot status and telemetry."""
     result = await session.execute(select(Robot).where(Robot.id == robot_id))
@@ -110,6 +112,28 @@ async def update_robot_status(
 
     await session.flush()
     await session.refresh(robot)
+
+    # Broadcast update to WebSocket subscribers
+    background_tasks.add_task(
+        manager.broadcast_robot_update,
+        robot_id,
+        {
+            "event": "status_update",
+            "robot_id": str(robot_id),
+            "robot": {
+                "id": str(robot.id),
+                "name": robot.name,
+                "serial_number": robot.serial_number,
+                "status": robot.status.value,
+                "location_x": robot.location_x,
+                "location_y": robot.location_y,
+                "location_z": robot.location_z,
+                "heading": robot.heading,
+                "battery_level": robot.battery_level,
+            },
+        },
+    )
+
     return robot
 
 
